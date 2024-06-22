@@ -6,6 +6,7 @@ import SkeletonCard from "@/components/cards/skeletonCard";
 import UserCard from "@/components/cards/userCard";
 
 import Sidebar from "@/components/sidebar";
+import Navbar from "@/components/navbar";
 
 interface DataProps {
   createdAt: Date | string;
@@ -26,20 +27,7 @@ interface ProfileProps {
 export default function Home() {
   // axios.defaults.withCredentials = true;
   const [displayData, setDisplayData] = useState<DataProps[]>([]);
-  const skeletonData: string[] = [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ];
+  const skeletonData: string[] = ["", "", "", "", "", "", "", "", ""];
   const [loading, setLoading] = useState<boolean>(false);
   const [openSheet, setOpenSheet] = useState<boolean>(false);
   const [userData, setUserData] = useState<DataProps>();
@@ -71,8 +59,9 @@ export default function Home() {
     );
   }
   return (
-    <main className="p-5">
-      <div className="gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <main className="">
+      <Navbar />
+      <div className="gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5">
         {loading
           ? skeletonData.map((_, i) => {
               return (
@@ -103,48 +92,6 @@ export default function Home() {
         // @ts-ignore
         userData={userData}
       />
-      {/* <Sheet open={openSheet} onOpenChange={setOpenSheet}>
-        <SheetContent>
-          <SheetHeader>
-            <Avatar className="h-24 w-24">
-              <AvatarImage
-                src={userData?.avatar ?? "https://github.com/shadcn.png"}
-                alt={userData?.profile.username ?? "@shadcn"}
-              />
-              <AvatarFallback>{`${userData?.profile.firstName[0]}${userData?.profile.lastName[0]}`}</AvatarFallback>
-            </Avatar>
-            <SheetTitle>
-              {`${userData?.profile.firstName} ${userData?.profile.lastName}`}
-            </SheetTitle>
-            <div className="text-slate-500 text-sm">
-              @{userData?.profile.username}
-            </div>
-            <SheetDescription>
-              <div className="flex flex-col gap-8">
-                <div className="flex flex-col gap-5">
-                  <div className="flex gap-1">
-                    <span className="font-bold">Job Title:</span>
-                    <span>{userData?.jobTitle}</span>
-                  </div>
-                  <div className="">
-                    <div className="font-medium text-lg">About</div>
-                    <div className="">{userData?.Bio}</div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="">
-                    Date joined: {getDate(userData?.createdAt)}
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <Mail />
-                    <div className="">{userData?.profile.email}</div>
-                  </div>
-                </div>
-              </div>
-            </SheetDescription>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet> */}
     </main>
   );
 }
