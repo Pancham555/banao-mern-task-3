@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardTitle } from "@/components/ui/card";
 import DrawerForSmallScreens from "@/components/drawerForSmallScreens";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataProps {
   createdAt: Date | string;
@@ -31,7 +32,7 @@ export default function Home() {
   // axios.defaults.withCredentials = true;
   const [displayData, setDisplayData] = useState<DataProps[]>([]);
   const skeletonData: string[] = ["", "", "", "", "", ""];
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [userData, setUserData] = useState<DataProps>();
   const [dataFetchFailed, setDataFetchFailed] = useState<boolean>(false);
@@ -73,8 +74,9 @@ export default function Home() {
               // @ts-ignore
               userData={userData}
             />
+
             <CardTitle className="text-slate-500 p-2 font-medium">
-              Users
+              {loading ? <Skeleton className="h-6 w-14" /> : "Users"}
             </CardTitle>
           </Card>
 
@@ -129,11 +131,12 @@ export default function Home() {
         <div className="lg:w-[65%] lg:block hidden">
           <Card className="mb-2">
             <CardTitle className="text-slate-500 p-2 font-medium">
-              User details
+              {loading ? <Skeleton className="h-6 w-14" /> : "User details"}
             </CardTitle>
           </Card>
           <div className="">
             <Sidebar
+              loading={loading}
               // @ts-ignore
               userData={userData}
             />

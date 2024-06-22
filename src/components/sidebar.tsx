@@ -3,9 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Mail } from "lucide-react";
 import getDate from "@/lib/getDate";
 import { Card } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 
 interface SidebarProps {
   userData: UserProps;
+  loading: boolean;
 }
 
 interface UserProps {
@@ -23,11 +25,15 @@ interface ProfileProps {
   lastName: string;
   email: string;
 }
-const Sidebar = ({ userData }: SidebarProps) => {
+const Sidebar = ({ userData, loading }: SidebarProps) => {
   return (
     <>
       <Card className="p-5 h-96">
-        {userData === undefined ? (
+        {loading ? (
+          <>
+            <Skeleton className="w-full h-full" />
+          </>
+        ) : userData === undefined ? (
           <>
             <div className="text-slate-500">User details will appear here!</div>
           </>
