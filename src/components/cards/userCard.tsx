@@ -35,7 +35,7 @@ const UserCard = (data: DataProps) => {
             <div className="">{data.jobTitle}</div>
           </div>
           <div className="">
-            <div className="">Other info</div>
+            <div className="">{data.Bio.slice(0, 8)}...</div>
           </div>
         </div>
       </CardContent>
