@@ -7,6 +7,9 @@ import UserCard from "@/components/cards/userCard";
 
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardTitle } from "@/components/ui/card";
+import DrawerForSmallScreens from "@/components/drawerForSmallScreens";
 
 interface DataProps {
   createdAt: Date | string;
@@ -27,9 +30,9 @@ interface ProfileProps {
 export default function Home() {
   // axios.defaults.withCredentials = true;
   const [displayData, setDisplayData] = useState<DataProps[]>([]);
-  const skeletonData: string[] = ["", "", "", "", "", "", "", "", ""];
+  const skeletonData: string[] = ["", "", "", "", "", ""];
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSheet, setOpenSheet] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [userData, setUserData] = useState<DataProps>();
   const [dataFetchFailed, setDataFetchFailed] = useState<boolean>(false);
 
@@ -54,44 +57,89 @@ export default function Home() {
   if (dataFetchFailed) {
     return (
       <main className="flex justify-center items-center min-h-screen w-full">
-        <div className="text-3xl">Sorry! No data Found :(</div>
+        <div className="text-3xl text-slate-500">Sorry! No data Found :(</div>
       </main>
     );
   }
   return (
     <main className="">
       <Navbar />
-      <div className="gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5">
-        {loading
-          ? skeletonData.map((_, i) => {
-              return (
-                <div key={i}>
-                  <SkeletonCard />
-                </div>
-              );
-            })
-          : displayData.map((data, index) => {
-              return (
-                <div
-                  className="cursor-pointer"
-                  key={index}
-                  onClick={() => {
-                    setUserData(data);
-                    setOpenSheet(true);
-                  }}
-                >
-                  <UserCard {...data} />
-                </div>
-              );
-            })}
-      </div>
+      <div className="flex p-5 gap-5">
+        <div className="lg:w-[35%] w-full">
+          <Card className="mb-2">
+            <DrawerForSmallScreens
+              openDrawer={openDrawer}
+              setOpenDrawer={setOpenDrawer}
+              // @ts-ignore
+              userData={userData}
+            />
+            <CardTitle className="text-slate-500 p-2 font-medium">
+              Users
+            </CardTitle>
+          </Card>
 
-      <Sidebar
-        openSheet={openSheet}
-        setOpenSheet={setOpenSheet}
-        // @ts-ignore
-        userData={userData}
-      />
+          <div className="lg:hidden flex gap-5 flex-col border-t pt-5">
+            {loading
+              ? skeletonData.map((_, i) => {
+                  return (
+                    <div key={i}>
+                      <SkeletonCard />
+                    </div>
+                  );
+                })
+              : displayData.map((data, index) => {
+                  return (
+                    <div
+                      className="cursor-pointer"
+                      key={index}
+                      onClick={() => {
+                        setUserData(data);
+                        setOpenDrawer(true);
+                      }}
+                    >
+                      <UserCard {...data} />
+                    </div>
+                  );
+                })}
+          </div>
+          <Card className="hidden lg:block">
+            <ScrollArea className="flex flex-col gap-5 h-96">
+              {loading
+                ? skeletonData.map((_, i) => {
+                    return (
+                      <div key={i}>
+                        <SkeletonCard />
+                      </div>
+                    );
+                  })
+                : displayData.map((data, index) => {
+                    return (
+                      <div
+                        className="cursor-pointer m-2"
+                        key={index}
+                        onClick={() => setUserData(data)}
+                      >
+                        <UserCard {...data} />
+                      </div>
+                    );
+                  })}
+            </ScrollArea>
+          </Card>
+        </div>
+        <div className="lg:w-[65%] lg:block hidden">
+          <Card className="mb-2">
+            <CardTitle className="text-slate-500 p-2 font-medium">
+              User details
+            </CardTitle>
+          </Card>
+          <div className="">
+            <Sidebar
+              // @ts-ignore
+              userData={userData}
+            />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
